@@ -3,6 +3,7 @@ import { create } from 'zustand';
 
 import { ApiError, fetchSnapshot } from '@/services/airQualityService';
 import { describePlace } from '@/services/placeService';
+import { readCachedSnapshot, writeCachedSnapshot } from '@/services/snapshotCache';
 import type { Coords, Snapshot } from '@/types/air';
 import { haversineMeters } from '@/utils/haversine';
 
@@ -61,6 +62,10 @@ export const useMonitoring = create<MonitoringState>()((set, get) => ({
   bootstrap: async () => {
     if (get().bootstrapped) return;
     set({ bootstrapped: true });
+
+    // Tampilkan data terakhir dari disk lebih dulu agar aplikasi tetap berguna offline.
+    const cached = await readCachedSnapshot();
+    if (cached) set({ snapshot: cached, loading: false });
 
     try {
       const permission = await Location.getForegroundPermissionsAsync();
@@ -127,6 +132,7 @@ export const useMonitoring = create<MonitoringState>()((set, get) => ({
 
   commitSnapshot: (snapshot) => {
     set({ snapshot, loading: false, refreshing: false, error: null });
+    void writeCachedSnapshot(snapshot);
   },
 
   failFetch: (message) => {

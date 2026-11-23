@@ -8,7 +8,10 @@
     "scheme": "myapp",
     "userInterfaceStyle": "light",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -38,7 +41,16 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
-      ]
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Izinkan UdaraWaspada mengakses galeri untuk melampirkan foto laporan.",
+          "cameraPermission": "Izinkan UdaraWaspada mengakses kamera untuk memotret bukti laporan.",
+          "microphonePermission": false
+        }
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,

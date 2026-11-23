@@ -149,14 +149,24 @@ export default function HomeScreen() {
       >
         <View style={styles.header}>
           <Text style={styles.wordmark}>UdaraWaspada</Text>
-          <Pressable
-            onPress={() => router.push('/map')}
-            hitSlop={8}
-            accessibilityRole="button"
-            accessibilityLabel="Buka peta laporan warga"
-          >
-            <Text style={styles.link}>Peta</Text>
-          </Pressable>
+          <View style={styles.headerLinks}>
+            <Pressable
+              onPress={() => router.push('/map')}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel="Buka peta laporan warga"
+            >
+              <Text style={styles.link}>Peta</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => router.push('/vault')}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel="Buka data dan berkas aman"
+            >
+              <Text style={styles.link}>Berkas</Text>
+            </Pressable>
+          </View>
         </View>
 
         <View style={styles.locationRow}>
@@ -349,6 +359,7 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.bg },
   content: { padding: space.lg, paddingBottom: space.xxl, gap: space.md },
   header: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' },
+  headerLinks: { flexDirection: 'row', gap: space.lg },
   wordmark: { fontSize: 17, fontWeight: '700', letterSpacing: -0.2, color: colors.ink },
   locationRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   locationBlock: { flex: 1, gap: 2, paddingRight: space.md },

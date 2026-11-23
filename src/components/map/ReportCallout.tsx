@@ -72,11 +72,14 @@ export default function ReportCallout({ report, onClose }: Props) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.surface,
-    borderRadius: 12,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.line,
+    borderRadius: 18,
     padding: space.lg,
     gap: space.sm,
+    shadowColor: '#0B1220',
+    shadowOpacity: 0.16,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 8,
   },
   header: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   badge: { flexDirection: 'row', alignItems: 'center', gap: 6 },

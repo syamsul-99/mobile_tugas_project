@@ -86,14 +86,18 @@ export default function MapScreen() {
     <View style={styles.container}>
       <View style={[styles.header, { paddingTop: insets.top + space.sm }]}>
         <Pressable
+          style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}
           onPress={() => router.back()}
           hitSlop={10}
           accessibilityRole="button"
           accessibilityLabel="Kembali"
         >
-          <Text style={styles.back}>Kembali</Text>
+          <Text style={styles.backIcon}>‹</Text>
         </Pressable>
-        <Text style={styles.title}>Peta laporan</Text>
+        <View style={styles.titleBlock}>
+          <Text style={styles.title}>Peta laporan</Text>
+          <Text style={styles.subtitle}>Laporan warga di sekitar Anda</Text>
+        </View>
         <View style={styles.sampleChip}>
           <Text style={styles.sampleChipText}>Data contoh</Text>
         </View>
@@ -177,11 +181,12 @@ export default function MapScreen() {
 
         {!selected && (
           <Pressable
-            style={[styles.locateButton, { bottom: space.lg }]}
+            style={({ pressed }) => [styles.locateButton, { bottom: space.lg }, pressed && styles.pressed]}
             onPress={handleLocate}
             accessibilityRole="button"
             accessibilityLabel="Pusatkan ke lokasi saya"
           >
+            <Text style={styles.locateIcon}>◎</Text>
             <Text style={styles.locateText}>{location ? 'Lokasi saya' : 'Aktifkan lokasi'}</Text>
           </Pressable>
         )}
@@ -210,28 +215,47 @@ export default function MapScreen() {
   );
 }
 
+const shadow = {
+  shadowColor: '#0B1220',
+  shadowOpacity: 0.12,
+  shadowRadius: 10,
+  shadowOffset: { width: 0, height: 4 },
+  elevation: 4,
+} as const;
+
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.bg },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     paddingHorizontal: space.lg,
-    paddingBottom: space.sm,
-    backgroundColor: colors.bg,
+    paddingBottom: space.md,
+    backgroundColor: colors.surface,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.line,
     gap: space.md,
   },
-  back: { fontSize: 13, fontWeight: '600', color: colors.accent },
-  title: { flex: 1, fontSize: 16, fontWeight: '700', color: colors.ink },
-  sampleChip: {
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.line,
-    borderRadius: 999,
-    paddingHorizontal: space.sm,
-    paddingVertical: 3,
+  backButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.accentSoft,
   },
-  sampleChipText: { fontSize: 10, color: colors.inkMuted },
-  mapWrapper: { flex: 1, overflow: 'hidden' },
+  pressed: { opacity: 0.6 },
+  backIcon: { fontSize: 24, lineHeight: 28, fontWeight: '700', color: colors.accent },
+  titleBlock: { flex: 1 },
+  title: { fontSize: 17, fontWeight: '700', color: colors.ink, letterSpacing: -0.2 },
+  subtitle: { fontSize: 11, color: colors.inkFaint, marginTop: 1 },
+  sampleChip: {
+    backgroundColor: colors.accentSoft,
+    borderRadius: 999,
+    paddingHorizontal: space.sm + 2,
+    paddingVertical: 4,
+  },
+  sampleChipText: { fontSize: 10, fontWeight: '600', color: colors.accent },
+  mapWrapper: { flex: 1, minHeight: 0, overflow: 'hidden' },
   topOverlay: {
     position: 'absolute',
     top: space.md,
@@ -247,28 +271,32 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: 999,
     paddingHorizontal: space.md,
-    paddingVertical: 6,
+    paddingVertical: 7,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: colors.line,
+    ...shadow,
   },
-  statusText: { fontSize: 11, color: colors.inkMuted },
+  statusText: { fontSize: 11, fontWeight: '500', color: colors.inkMuted },
   errorBanner: {
     backgroundColor: colors.surface,
-    borderLeftWidth: 2,
+    borderLeftWidth: 3,
     borderLeftColor: colors.unhealthy,
+    borderRadius: 10,
     paddingVertical: space.sm,
     paddingHorizontal: space.md,
     gap: space.xs,
+    ...shadow,
   },
   errorText: { fontSize: 12, lineHeight: 18, color: colors.inkMuted },
   link: { fontSize: 12, fontWeight: '600', color: colors.accent },
   permissionCard: {
     backgroundColor: colors.surface,
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: colors.line,
     padding: space.lg,
     gap: space.sm,
+    ...shadow,
   },
   permissionTitle: { fontSize: 14, fontWeight: '600', color: colors.ink },
   permissionText: { fontSize: 12, lineHeight: 18, color: colors.inkMuted },
@@ -291,35 +319,41 @@ const styles = StyleSheet.create({
   locateButton: {
     position: 'absolute',
     right: space.lg,
-    backgroundColor: colors.surface,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: colors.accent,
     borderRadius: 999,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.line,
     paddingHorizontal: space.lg,
-    paddingVertical: space.sm,
+    paddingVertical: space.sm + 2,
+    ...shadow,
   },
-  locateText: { fontSize: 12, fontWeight: '600', color: colors.accent },
+  locateIcon: { fontSize: 14, color: colors.surface, lineHeight: 16 },
+  locateText: { fontSize: 12, fontWeight: '600', color: colors.surface },
   simulationNotice: {
     position: 'absolute',
     left: space.lg,
     backgroundColor: colors.surface,
-    borderRadius: 8,
+    borderRadius: 10,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: colors.line,
     paddingHorizontal: space.sm,
-    paddingVertical: 4,
+    paddingVertical: 5,
     maxWidth: 180,
+    ...shadow,
   },
   simulationText: { fontSize: 10, lineHeight: 14, color: colors.inkMuted },
   hintWrapper: { position: 'absolute', bottom: space.xxl + space.lg, alignSelf: 'center' },
   hint: {
     fontSize: 11,
+    fontWeight: '500',
     color: colors.inkMuted,
     backgroundColor: colors.surface,
     paddingHorizontal: space.md,
-    paddingVertical: 6,
+    paddingVertical: 7,
     borderRadius: 999,
     overflow: 'hidden',
+    ...shadow,
   },
   callout: {
     position: 'absolute',
